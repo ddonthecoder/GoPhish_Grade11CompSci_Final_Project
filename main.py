@@ -8,11 +8,14 @@ import random
 pygame.init()
 pygame.font.init()
 screen = pygame.display.set_mode((800, 800))
-my_font = pygame.font.SysFont("Times New Roman", 40)
+bold_font = pygame.font.SysFont("Calibri", 25, bold=True)
+italic_font = pygame.font.SysFont("Calibri",30, italic=True)
 
 #TEXTS
-text_AI_HAND = my_font.render("AI's Hand", True, (255,255,255))
-text_PLAYER_HAND = my_font.render("Your Hand", True, (255,255,255))
+text_AI_HAND = bold_font.render("AI", True, (50,50,50))
+text_PLAYER_HAND = bold_font.render("You", True, (50,50,50))
+
+text_CHAT = italic_font.render("Chat", True, (50,50,50))
 
 """
 Assigning each card to a seperate index via a dictionary might seem very
@@ -154,24 +157,42 @@ while running:
     screen.fill((0, 100, 10)) #Fill screen with black
 
     #Wood edges
-    pygame.draw.rect(screen, (100, 50, 40), pygame.Rect(0,0,50,800)) #Left
-    pygame.draw.rect(screen, (100, 50, 40), pygame.Rect(750,0,50,800)) #Right
-    pygame.draw.rect(screen, (100, 50, 40), pygame.Rect(0,0,800,50)) #Top
-    pygame.draw.rect(screen, (100, 50, 40), pygame.Rect(0,750,800,50)) #Bottom
+
+    stroke_color = (50, 50, 50)
+    corner_roundness = 8
+    stroke_thickness = 3 
+
+    #PLAYER_TAB
+    pygame.draw.rect(screen, (235,235,235), pygame.Rect(95,600,610,30), border_radius=corner_roundness)
+    #Stroke
+    pygame.draw.rect(screen, stroke_color, pygame.Rect(95,600,610,30), width=stroke_thickness, border_radius=corner_roundness)
+    screen.blit(text_PLAYER_HAND, (375, 602))
+
+
+    #AI Name tag
+    pygame.draw.rect(screen, (235,235,235), pygame.Rect(95,60,610,30), border_radius=corner_roundness)
+    #Stroke
+    pygame.draw.rect(screen, stroke_color, pygame.Rect(95,60,610,30), width=stroke_thickness, border_radius=corner_roundness)
+    screen.blit(text_AI_HAND, (375, 62))
 
     x_pos = 95
     for x in bot_deck:
         screen.blit(card_back_surf, (x_pos, 100))
         x_pos += 90 
-    screen.blit(text_AI_HAND, (325, 50))
     
     x_pos = 95
     for cid in player_deck:
         image_to_draw = cards_deck[cid]["surf"]
-        screen.blit(image_to_draw, (x_pos, 600))
+        screen.blit(image_to_draw, (x_pos, 500))
         x_pos += 90 
-    screen.blit(text_PLAYER_HAND, (325, 700))
+    
+    #TEXT PANEL
+    pygame.draw.rect(screen, (235,235,235), pygame.Rect(0,650,800,150))
+    pygame.draw.rect(screen, stroke_color, pygame.Rect(0,650,800,150), width=stroke_thickness)
 
-    pygame.draw.rect(screen, (1, 46, 5), pygame.Rect(0,0))
+    pygame.draw.rect(screen, (200,200,200), pygame.Rect(0,650,800,30))
+    pygame.draw.rect(screen, stroke_color, pygame.Rect(0,650,800,30), width=stroke_thickness)
+    screen.blit(text_CHAT, (10, 650))
+
     pygame.display.flip()
 pygame.quit()
